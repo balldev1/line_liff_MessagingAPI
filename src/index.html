@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <span id="loading">Loading .. .</span>
+
+      <div id="lineProfile" style="display: none">
+        <img
+          id="lineImage"
+          width="100px"
+          src="https://fastly.picsum.photos/id/1052/100/100.jpg?hmac=VsnlThcMtUmwNn8h7y-QqIYnNbY3G6pWR4O1NJU4-PE"
+        />
+        <div id="lineName">Hello Name</div>
+        <div id="lineStatusMessage">Hello Name</div>
+        <div id="lineUID">UID: Your Uid</div>
+      </div>
+
+      <button id="logout" onclick="logout()">Logout</button>
+    </div>
+    <!-- script -->
+    <script
+      charset="utf-8"
+      src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"
+    ></script>
+    <script>
+      const main = async () => {
+        await liff.init({ liffId: "" });
+        if (liff.isLoggedIn()) {
+          const profile = await liff.getProfile();
+
+          loading.style.display = "none";
+
+          // update_profile
+          lineImage.src = profile.pictureUrl;
+          lineName.textContent = `Hello ${profile.displayName}`;
+          lineStatusMessage.textContent = profile.statusMessage;
+          lineUID.textContent = profile.userId;
+          lineProfile.style.display = "block";
+
+          console.log("login la ja.. .", profile);
+        } else {
+          console.log("please login.. .");
+          liff.login();
+          return false;
+        }
+      };
+
+      const logout = async () => {
+        liff.logout();
+        console.log("logout la ja.. .");
+        window.location.reload();
+      };
+      main();
+    </script>
+  </body>
+</html>
